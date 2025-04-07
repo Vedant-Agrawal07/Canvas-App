@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    body {
+      background-color: rgb(66, 63, 63);
+    }
+
+    .tutorial {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas class="tutorial" height="250" width="250"></canvas>
+  <script>
+    function draw() {
+      const canvas = document.querySelector('.tutorial');
+      if (canvas.getContext) {
+        const ctx = canvas.getContext("2d");
+
+        ctx.fillRect(25 , 35 , 100 ,  100); // draws a filled rectangle
+        // ctx.clearRect(45 , 45 , 60 ,  60 ); // clears specified area making it transparet
+        // ctx.strokeRect(50 , 50 , 50 ,  50);  // draws a rectangle outline
+
+        //to draw a triangle
+        // ctx.beginPath();
+        // ctx.moveTo(75, 50);
+        // ctx.lineTo(100, 75);
+        // ctx.lineTo(100, 25);
+        // ctx.fill();
+
+
+        // Filled triangle
+        // ctx.beginPath();
+        // ctx.moveTo(25, 25);
+        // ctx.lineTo(105, 25);
+        // ctx.lineTo(25, 105);
+        // ctx.fill();  // automatically closes the path
+
+        // // Stroked triangle
+        // ctx.beginPath();
+        // ctx.moveTo(125, 125);
+        // ctx.lineTo(125, 45);
+        // ctx.lineTo(45, 125);
+        // ctx.closePath();
+        // ctx.stroke();
+
+
+
+
+
+        // ctx.beginPath();
+        // ctx.arc(80 , 80 , 40 , 0 , Math.PI*2 , false);  // ctx.arc(x , y , radius , startangle , endangle , clockwise/counterclockwise)
+        // ctx.moveTo(140,200)
+        // ctx.arc(100 , 200 , 40 , 0 , Math.PI , true);
+        // ctx.stroke();
+
+
+        // ctx.beginPath();
+        // ctx.arc(75, 75, 50, 0, Math.PI * 2, true); // Outer circle
+        // ctx.moveTo(110, 75);
+        // ctx.arc(75, 75, 35, 0, Math.PI , false); // Mouth (clockwise)
+        // ctx.moveTo(65, 65);
+        // ctx.arc(60, 65, 5, 0, Math.PI * 2, true); // Left eye
+        // ctx.moveTo(95, 65);
+        // ctx.arc(90, 65, 5, 0, Math.PI * 2, true); // Right eye
+        // ctx.stroke();
+
+
+        // ctx.beginPath();
+
+        // // Outer shape clockwise ⟳
+        // ctx.moveTo(0, 0);
+        // ctx.lineTo(150, 0);
+        // ctx.lineTo(75, 129.9);
+        // ctx.fillStyle = "orange"
+
+        // // Inner shape anticlockwise ↺
+        // ctx.moveTo(75, 20);
+        // ctx.lineTo(50, 60);
+        // ctx.lineTo(100, 60);
+        // ctx.fillStyle = "green"
+        // ctx.fill();
+
+
+
+        // ctx.beginPath();
+        // ctx.arc(125,120,40,0,Math.PI*2,false);
+
+        // ctx.strokeStyle = "orange";
+        // ctx.stroke();
+
+
+        //transpareent
+        // ctx.beginPath();
+        // ctx.arc(125,120,40,0,Math.PI*2,false);
+
+        // ctx.fillStyle = "rgb(255 0 0 / 20%)";
+        // ctx.fill();
+
+
+        // ctx.lineWidth = 22;
+        // ctx.moveTo(100,90);
+        // ctx.lineTo(100,200);
+        // ctx.stroke();
+      }
+    }
+
+
+
+
+
+    window.addEventListener("load", draw)
+  </script>
+</body>
+
+</html>
