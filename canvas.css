@@ -1,0 +1,39 @@
+body {
+  background-color: #4a99f8;
+}
+button {
+  border: none;
+  background-color: white;
+  cursor: pointer;
+}
+.left-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 180px;
+  background-color: white;
+  border-radius: 10px;
+}
+.shape-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  margin-left: -48px;
+}
+.shape-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+}
+.options-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 150px;
+  margin-left: -70px;
+}
