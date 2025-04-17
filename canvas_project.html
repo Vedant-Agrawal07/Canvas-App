@@ -37,7 +37,7 @@
               margin-left: -48px;
             "
           >
-            <p style="margin-left: -57px">Shapes</p>
+            <p style="margin-left: -57px">Shapes & Line</p>
             <div
               style="
                 display: flex;
@@ -46,7 +46,7 @@
                 width: 100px;
               "
             >
-              <img src="/images/square-icon.png" style="height: 20px" />
+              <img src="/images/rectangle-icon.png" style="height: 20px" />
               <button class="rectangle_button" style="margin-left: 10px">
                 Rectangle
               </button>
@@ -83,6 +83,24 @@
               />
               <button class="circle_button" style="margin-left: 10px">
                 Circle
+              </button>
+            </div>
+
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100px;
+                margin-top: 7px;
+              "
+            >
+              <img
+                src="/images/line-icon.png"
+                style="height: 20px; margin-left: -24px"
+              />
+              <button class="line_button" style="margin-left: 10px">
+                Line
               </button>
             </div>
           </div>
@@ -152,236 +170,267 @@
     </div>
 
     <script>
-      const canvas = document.querySelector(".main_canvas");
-      const ctx = canvas.getContext("2d");
-      let slider = document.querySelector(".slider");
-      let colourPicker = document.querySelector(".colour_picker");
-      let clear_page = document.querySelector(".clear_button");
-      let capture = document.querySelector(".capture_button");
-      let erase = document.querySelector(".eraser_button");
-      let draw = document.querySelector(".draw_button");
-      let triangle_draw = document.querySelector(".triangle_button");
-      let rectangle_draw = document.querySelector(".rectangle_button");
-      let circle_draw = document.querySelector(".circle_button");
-      let fill = document.querySelector(".fill_input");
+            const canvas = document.querySelector(".main_canvas");
+            const ctx = canvas.getContext("2d");
+            let slider = document.querySelector(".slider");
+            let colourPicker = document.querySelector(".colour_picker");
+            let clear_page = document.querySelector(".clear_button");
+            let capture = document.querySelector(".capture_button");
+            let erase = document.querySelector(".eraser_button");
+            let draw = document.querySelector(".draw_button");
+            let triangle_draw = document.querySelector(".triangle_button");
+            let rectangle_draw = document.querySelector(".rectangle_button");
+            let circle_draw = document.querySelector(".circle_button");
+            let line_draw = document.querySelector(".line_button");
+            let fill = document.querySelector(".fill_input");
 
-      let isDrawing = false;
-      let startX = 0;
-      let startY = 0;
-      let mode = "draw";
-      let fill_shape = false;
+            let isDrawing = false;
+            let startX = 0;
+            let startY = 0;
+            let mode = "draw";
+            let fill_shape = false;
 
-      fill.addEventListener("click", () => {
-        if (fill.checked) {
-          fill_shape = true;
-        } else {
-          fill_shape = false;
-        }
-      });
+            fill.addEventListener("click", () => {
+              if (fill.checked) {
+                fill_shape = true;
+              } else {
+                fill_shape = false;
+              }
+            });
 
-      erase.addEventListener("click", () => {
-        mode = "erase";
-      });
+            erase.addEventListener("click", () => {
+              mode = "erase";
+            });
 
-      draw.addEventListener("click", () => {
-        mode = "draw";
-      });
+            draw.addEventListener("click", () => {
+              mode = "draw";
+            });
 
-      triangle_draw.addEventListener("click", () => {
-        mode = "triangle";
-      });
-      rectangle_draw.addEventListener("click", () => {
-        mode = "rectangle";
-      });
-      circle_draw.addEventListener("click", () => {
-        mode = "circle";
-      });
+            triangle_draw.addEventListener("click", () => {
+              mode = "triangle";
+            });
+            rectangle_draw.addEventListener("click", () => {
+              mode = "rectangle";
+            });
+            circle_draw.addEventListener("click", () => {
+              mode = "circle";
+            });
+            line_draw.addEventListener("click", () => {
+              mode = "line";
+            });
 
-      clear_page.addEventListener("click", () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-      });
+            clear_page.addEventListener("click", () => {
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+            });
 
-      capture.addEventListener("click", () => {
-        const dataURL = canvas.toDataURL("image/png", 1.0);
-        const link = document.createElement("a");
-        link.download = "canvas_image.png";
-        link.href = dataURL;
-        link.click();
-      });
+            capture.addEventListener("click", () => {
+              const dataURL = canvas.toDataURL("image/png", 1.0);
+              const link = document.createElement("a");
+              link.download = "canvas_image.png";
+              link.href = dataURL;
+              link.click();
+            });
 
-      slider.oninput = function () {
-        triangle.line_width = slider.value;
-        rectangle.line_width = slider.value;
-        circle.line_width = slider.value;
+            slider.oninput = function () {
+              triangle.line_width = slider.value;
+              rectangle.line_width = slider.value;
+              circle.line_width = slider.value;
+              line.line_width = slider.value;
 
-        ball.radius = slider.value;
-        eraser.radius = slider.value;
-        ctx.lineWidth = slider.value;
-      };
+              ball.radius = slider.value;
+              eraser.radius = slider.value;
+              ctx.lineWidth = slider.value;
+            };
 
-      colourPicker.oninput = function () {
-        ball.color = colourPicker.value;
-        rectangle.color = colourPicker.value;
-        triangle.color = colourPicker.value;
-        circle.color = colourPicker.value;
-        ctx.strokeStyle = colourPicker.value;
-        ctx.fillStyle = colourPicker.value;
-      };
+            colourPicker.oninput = function () {
+              ball.color = colourPicker.value;
+              rectangle.color = colourPicker.value;
+              triangle.color = colourPicker.value;
+              circle.color = colourPicker.value;
+              line.color = colourPicker.value;
+              ctx.strokeStyle = colourPicker.value;
+              ctx.fillStyle = colourPicker.value;
+            };
 
-      const eraser = {
-        radius: slider.value,
-        draw() {
-          ctx.beginPath();
-          ctx.arc(startX, startY, this.radius, 0, Math.PI * 2, true);
-          ctx.fillStyle = "white";
-          ctx.fill();
-        },
-      };
+            const eraser = {
+              radius: slider.value,
+              draw() {
+                ctx.beginPath();
+                ctx.arc(startX, startY, this.radius, 0, Math.PI * 2, true);
+                ctx.fillStyle = "white";
+                ctx.fill();
+              },
+            };
 
-      const ball = {
-        radius: slider.value,
-        color: "orange",
-        draw() {
-          ctx.beginPath();
-          ctx.arc(startX, startY, this.radius, 0, Math.PI * 2, true);
-          ctx.fillStyle = this.color;
-          ctx.fill();
-        },
-      };
+            const ball = {
+              radius: slider.value,
+              color: "orange",
+              draw() {
+                ctx.beginPath();
+                ctx.arc(startX, startY, this.radius, 0, Math.PI * 2, true);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+              },
+            };
 
-      const rectangle = {
-        x: 0,
-        y: 0,
+            const rectangle = {
+              x: 0,
+              y: 0,
 
-        line_width: slider.value,
-        color: "orange",
-        draw(fill_shape) {
-          ctx.lineWidth = this.line_width;
-          if (fill_shape) {
-            ctx.fillStyle = this.color;
-            ctx.fillRect(startX, startY, this.x, this.y);
-          } else {
-            ctx.strokeStyle = this.color;
-            ctx.strokeRect(startX, startY, this.x, this.y);
-          }
-        },
-      };
+              line_width: slider.value,
+              color: "orange",
+              draw(fill_shape) {
+                ctx.lineWidth = this.line_width;
+                if (fill_shape) {
+                  ctx.fillStyle = this.color;
+                  ctx.fillRect(startX, startY, this.x, this.y);
+                } else {
+                  ctx.strokeStyle = this.color;
+                  ctx.strokeRect(startX, startY, this.x, this.y);
+                }
+              },
+            };
 
-      const triangle = {
-        x: 0,
-        y: 0,
+            const triangle = {
+              x: 0,
+              y: 0,
 
-        line_width: slider.value,
-        color: "orange",
-        draw(fill_shape) {
-          if (fill_shape) {
-            ctx.beginPath();
-            ctx.moveTo((this.x + startX) / 2, startY);
-            ctx.lineTo(startX, this.y);
-            ctx.lineTo(this.x, this.y);
-            ctx.lineWidth = this.line_width;
-            ctx.closePath();
-            ctx.fillStyle = this.color;
-            ctx.fill();
-          } else {
-            ctx.beginPath();
-            ctx.moveTo((this.x + startX) / 2, startY);
-            ctx.lineTo(startX, this.y);
-            ctx.lineTo(this.x, this.y);
-            ctx.lineWidth = this.line_width;
-            ctx.closePath();
-            ctx.strokeStyle = this.color;
-            ctx.stroke();
-          }
-        },
-      };
+              line_width: slider.value,
+              color: "orange",
+              draw(fill_shape) {
+                if (fill_shape) {
+                  ctx.beginPath();
+                  ctx.moveTo((this.x + startX) / 2, startY);
+                  ctx.lineTo(startX, this.y);
+                  ctx.lineTo(this.x, this.y);
+                  ctx.lineWidth = this.line_width;
+                  ctx.closePath();
+                  ctx.fillStyle = this.color;
+                  ctx.fill();
+                } else {
+                  ctx.beginPath();
+                  ctx.moveTo((this.x + startX) / 2, startY);
+                  ctx.lineTo(startX, this.y);
+                  ctx.lineTo(this.x, this.y);
+                  ctx.lineWidth = this.line_width;
+                  ctx.closePath();
+                  ctx.strokeStyle = this.color;
+                  ctx.stroke();
+                }
+              },
+            };
 
-      const circle = {
-        radius: 44,
-        line_width: slider.value,
-        color: "orange",
-        draw(fill_shape) {
-          if (fill_shape) {
-            ctx.beginPath();
-            ctx.arc(startX, startY, this.radius, 0, Math.PI * 2, true);
-            ctx.lineWidth = this.line_width;
-            ctx.fillStyle = this.color;
-            ctx.fill();
-          } else {
-            ctx.beginPath();
-            ctx.arc(startX, startY, this.radius, 0, Math.PI * 2, true);
-            ctx.lineWidth = this.line_width;
-            ctx.strokeStyle = this.color;
-            ctx.stroke();
-          }
-        },
-      };
+            const circle = {
+              radius: 44,
+              line_width: slider.value,
+              color: "orange",
+              draw(fill_shape) {
+                if (fill_shape) {
+                  ctx.beginPath();
+                  ctx.arc(startX, startY, this.radius, 0, Math.PI * 2, true);
+                  ctx.lineWidth = this.line_width;
+                  ctx.fillStyle = this.color;
+                  ctx.fill();
+                } else {
+                  ctx.beginPath();
+                  ctx.arc(startX, startY, this.radius, 0, Math.PI * 2, true);
+                  ctx.lineWidth = this.line_width;
+                  ctx.strokeStyle = this.color;
+                  ctx.stroke();
+                }
+              },
+            };
 
-      function clear() {
-        ctx.fillStyle = "rgb(255 255 255 / 100%)";
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-      }
+            const line = {
+              x:0,
+              y:0,
+              line_width: slider.value,
+              color: "orange",
+              draw(){
+                ctx.beginPath();
+                ctx.moveTo(startX, startY); 
+                ctx.lineTo(this.x, this.y); 
+                ctx.lineWidth = this.line_width;
+                 ctx.strokeStyle = this.color;
+                ctx.stroke();
+              }
 
-      canvas.addEventListener("mousedown", (e) => {
-        startX = e.offsetX;
-        startY = e.offsetY;
+            }
 
-        isDrawing = true;
+            function clear() {
+              ctx.fillStyle = "rgb(255 255 255 / 100%)";
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
 
-        savedCanvasState = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        mouse_drag();
-      });
-
-      function mouse_drag() {
-        canvas.addEventListener("mousemove", onMouseMove);
-      }
-
-      function onMouseMove(e) {
-        if (isDrawing) {
-          switch (mode) {
-            case "erase":
+            canvas.addEventListener("mousedown", (e) => {
               startX = e.offsetX;
               startY = e.offsetY;
-              eraser.draw();
-              break;
 
-            case "draw":
-              startX = e.offsetX;
-              startY = e.offsetY;
-              ball.draw();
-              break;
+              isDrawing = true;
 
-            case "rectangle":
-              ctx.putImageData(savedCanvasState, 0, 0);
-              const currentX = e.clientX - canvas.offsetLeft;
-              const currentY = e.clientY - canvas.offsetTop;
-              rectangle.x = currentX - startX;
-              rectangle.y = currentY - startY;
+              savedCanvasState = ctx.getImageData(0, 0, canvas.width, canvas.height);
+              mouse_drag();
+            });
 
-              rectangle.draw(fill_shape);
-              break;
+            function mouse_drag() {
+              canvas.addEventListener("mousemove", onMouseMove);
+            }
 
-            case "triangle":
-              ctx.putImageData(savedCanvasState, 0, 0);
-              triangle.x = e.offsetX;
-              triangle.y = e.offsetY;
+            function onMouseMove(e) {
+              if (isDrawing) {
+                switch (mode) {
+                  case "erase":
+                    startX = e.offsetX;
+                    startY = e.offsetY;
+                    eraser.draw();
+                    break;
 
-              triangle.draw(fill_shape);
-              break;
+                  case "draw":
+                    startX = e.offsetX;
+                    startY = e.offsetY;
+                    ball.draw();
+                    break;
 
-            case "circle":
-              ctx.putImageData(savedCanvasState, 0, 0);
-              circle.radius = Math.abs(e.clientX - startX);
-              circle.draw(fill_shape);
-              break;
-          }
-        }
-      }
+                  case "rectangle":
+                    ctx.putImageData(savedCanvasState, 0, 0);
+                    const currentX = e.clientX - canvas.offsetLeft;
+                    const currentY = e.clientY - canvas.offsetTop;
+                    rectangle.x = currentX - startX;
+                    rectangle.y = currentY - startY;
 
-      canvas.addEventListener("mouseup", () => {
-        isDrawing = false;
-        canvas.removeEventListener("mousemove", onMouseMove);
-      });
+                    rectangle.draw(fill_shape);
+                    break;
+
+                  case "triangle":
+                    ctx.putImageData(savedCanvasState, 0, 0);
+                    triangle.x = e.offsetX;
+                    triangle.y = e.offsetY;
+
+                    triangle.draw(fill_shape);
+                    break;
+
+                  case "circle":
+                    ctx.putImageData(savedCanvasState, 0, 0);
+                    circle.radius = Math.abs(e.clientX - startX);
+                    circle.draw(fill_shape);
+                    break;
+
+                    case "line":
+                    ctx.putImageData(savedCanvasState, 0, 0);
+                    line.x = e.offsetX;
+                    line.y = e.offsetY;
+                    line.draw();
+
+
+
+                }
+              }
+            }
+
+            canvas.addEventListener("mouseup", () => {
+              isDrawing = false;
+              canvas.removeEventListener("mousemove", onMouseMove);
+            });
     </script>
   </body>
 </html>
