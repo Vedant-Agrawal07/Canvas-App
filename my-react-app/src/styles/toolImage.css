@@ -1,0 +1,12 @@
+.tool-item {
+  transition: transform 0.3s ease-in-out;
+  
+}
+
+.tool-item:hover {
+  transform: translateX(20px); /* Move the item to the right on hover */
+}
+
+.tool-item.selected {
+  transform: translateX(20px); /* Keep the item moved to the right when selected */
+}
